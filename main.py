@@ -7,9 +7,9 @@ def main():
     parser = argparse.ArgumentParser(description="Sensor Pipeline - Hourly & Monthly Reports")
     parser.add_argument('--mode', '-m', choices=['hourly', 'monthly'], default='monthly',
                         help='Execution mode')
-    parser.add_argument('--input', '-i', default='Hourly Data check/Data',
+    parser.add_argument('--input', '-i', default='Data/',
                         help='Input data directory')
-    parser.add_argument('--output', '-o', default='Hourly Data check/report',
+    parser.add_argument('--output', '-o', default='report/',
                         help='Output directory')
     parser.add_argument('--interval', '-int', type=int, default=60,
                         help='Run interval in minutes (for hourly mode)')
