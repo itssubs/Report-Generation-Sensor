@@ -38,7 +38,7 @@ Validation and Error Handling
 Modular Program Design
 
 Technologies Used
-Python 3.x
+Python 3.13.1
 pandas
 schedule
 Jinja2
