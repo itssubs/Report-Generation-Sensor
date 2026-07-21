@@ -94,6 +94,8 @@ Sensor statistics
 Tabulated sensor readings
 Summary section
 
+For the generated output to be generated without any error create a report folder with 3 subfolders excels, htmls, and pdfs. And each report will be generated in their respective folders.
+
 Purpose
 
 This project was developed as part of my Python learning roadmap to reinforce newly learned concepts through practical implementation.
