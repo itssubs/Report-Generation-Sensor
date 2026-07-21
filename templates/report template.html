@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Performance Report - {{ month_name }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --primary: #1e40af;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --critical: #ef4444;
+            --text: #1f2937;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f8fafc;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1180px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+            color: white;
+            padding: 2.8rem 3rem;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+        
+        .header .subtitle {
+            font-size: 1.35rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        .meta {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 2rem;
+            font-size: 1rem;
+        }
+        
+        .content {
+            padding: 3rem;
+        }
+        
+        .section {
+            margin-bottom: 3.5rem;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--border);
+        }
+        
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            background: #dbeafe;
+            color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+        
+        .section-title {
+            font-size: 1.65rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* FIXED: Target .dataframe classes produced by pandas */
+        table, .dataframe {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            margin: 1.5rem 0;
+            border: none !important; /* Overwrites pandas borders */
+        }
+        
+        th, .dataframe th {
+            background: #f1f5f9;
+            padding: 1.1rem 1.25rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border: none !important;
+        }
+        
+        td, .dataframe td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+        }
+        
+        tr:hover, .dataframe tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        /* FIXED: Force responsive image scaling */
+        .chart-container img {
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .status-ok { color: var(--success); font-weight: 600; }
+        .status-warning { color: var(--warning); font-weight: 600; }
+        .status-critical { color: var(--critical); font-weight: 600; }
+        
+        .footer {
+            background: #f8fafc;
+            padding: 2rem 3rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Sensor Network Performance Report</h1>
+            <div class="subtitle">{{ month_name }}</div>
+            
+            <div class="meta">
+                <div><strong>Generated:</strong> {{ current_date }}</div>
+                <div><strong>Report Type:</strong> Engineering Review</div>
+                <div><strong>Data Source:</strong> Sensor CSV Logs</div>
+            </div>
+        </div>
+
+        <div class="content">
+            
+            <!-- Summary Statistics -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">📊</div>
+                    <h2 class="section-title">Monthly Summary</h2>
+                </div>
+                {{ summary_table | safe }}
+            </div>
+
+            <!-- Temperature Trend Chart -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🌡️</div>
+                    <h2 class="section-title">Temperature Trend Analysis</h2>
+                </div>
+                <div class="chart-container">
+                    <img src="{{ image }}" alt="Temperature Trend Over Time">
+                    <p style="margin-top: 12px; color: #64748b; font-size: 0.95rem;">
+                        Temperature readings across all sensors for {{ month_name }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sensor Performance Table -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">📋</div>
+                    <h2 class="section-title">Sensor Performance Summary</h2>
+                </div>
+                <p style="margin-bottom: 1rem; color: #64748b;">
+                    Aggregated statistics per sensor (Mean, Max, Min)
+                </p>
+                {{ table1 | safe }} <!-- FIXED: Added safe filter -->
+            </div>
+
+            <!-- Critical Events -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🚨</div>
+                    <h2 class="section-title">Critical &amp; Warning Events</h2>
+                </div>
+                <p style="margin-bottom: 1rem; color: #64748b;">
+                    All records where Status = Warning or Critical
+                </p>
+                {{ table2 | safe }} <!-- FIXED: Added safe filter -->
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <strong>Engineering Sensor Review Report</strong> • {{ month_name }} • 
+            Confidential • Generated automatically via SensorPipeline
+        </div>
+    </div>
+</body>
+</html>
